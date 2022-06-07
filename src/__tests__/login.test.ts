@@ -1,6 +1,6 @@
-const frisby = require('frisby');
+// const frisby = require('frisby');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('3 - Crie o endpoint POST /login', () => {
   it('Será validado que o endpoint deve ser capaz de retornar um token aleatório de 16 caracteres', async () => {
@@ -12,7 +12,7 @@ describe('3 - Crie o endpoint POST /login', () => {
         },
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         expect(result.token.length).toBe(16);
@@ -27,7 +27,7 @@ describe('3 - Crie o endpoint POST /login', () => {
         },
       })
       .expect('status', 400)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         expect(result.message).toBe('O campo "email" é obrigatório');
@@ -43,12 +43,10 @@ describe('3 - Crie o endpoint POST /login', () => {
         },
       })
       .expect('status', 400)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
-        expect(result.message).toBe(
-          'O "email" deve ter o formato "email@email.com"',
-        );
+        expect(result.message).toBe('O "email" deve ter o formato "email@email.com"');
       });
   });
 
@@ -60,7 +58,7 @@ describe('3 - Crie o endpoint POST /login', () => {
         },
       })
       .expect('status', 400)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         expect(result.message).toBe('O campo "password" é obrigatório');
@@ -76,12 +74,10 @@ describe('3 - Crie o endpoint POST /login', () => {
         },
       })
       .expect('status', 400)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
-        expect(result.message).toBe(
-          'O "password" deve ter pelo menos 6 caracteres',
-        );
+        expect(result.message).toBe('O "password" deve ter pelo menos 6 caracteres');
       });
   });
 });

@@ -1,32 +1,21 @@
-const frisby = require('frisby');
-const fs = require('fs');
-const path = require('path');
+// const frisby = require('frisby');
+// const fs = require('fs');
+// const path = require('path');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('6 - Crie o endpoint DELETE /talker/:id', () => {
   beforeEach(() => {
-    const talkerSeed = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerSeed = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerSeed,
-      'utf8'
-    );
-    afterAll(() =>{
-      fs.writeFileSync(
-        path.join(__dirname, '..', 'talker.json'),
-        talkerSeed,
-        'utf8',
-      );
-    })
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
+    afterAll(() => {
+      fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
+    });
   });
 
   it('Será validado que é possível deletar uma pessoa palestrante com sucesso', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -34,7 +23,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -55,7 +44,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -67,7 +56,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -83,16 +72,14 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
           .expect('status', 204)
           .then(() => {
             expect(require('../talker.json')).not.toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining({ id: resultTalker.id})]
-              )
+              expect.arrayContaining([expect.objectContaining({ id: resultTalker.id })]),
             );
           });
       });
   });
 
   it('Será validado que não é possível deletar uma pessoa palestrante sem estar autorizado', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -100,7 +87,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -121,7 +108,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -146,10 +133,10 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
             },
           })
           .expect('status', 401)
-          .then((responseDelete) => {
+          .then((responseDelete: { json: any }) => {
             const { json } = responseDelete;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
@@ -162,7 +149,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -180,7 +167,7 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
             talk: { watchedAt: '23/10/2020', rate: 5 },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -195,9 +182,9 @@ describe('6 - Crie o endpoint DELETE /talker/:id', () => {
           },
         },
       })
-      .delete(`${url}/talker/${resultTalker.id}`)
+      .delete(`${url}/talker/${(resultTalker as any).id}`)
       .expect('status', 401)
-      .then((responseDelete) => {
+      .then((responseDelete: { json: any }) => {
         const { json } = responseDelete;
         expect(json.message).toBe('Token inválido');
       });

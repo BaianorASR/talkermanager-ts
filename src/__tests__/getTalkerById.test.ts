@@ -1,28 +1,21 @@
-const frisby = require('frisby');
-const fs = require('fs');
-const path = require('path');
+// const frisby = require('frisby');
+// const fs = require('fs');
+// const path = require('path');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('2 - Crie o endpoint GET /talker/:id', () => {
   beforeEach(() => {
-    const talkerSeed = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerSeed = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerSeed,
-      'utf8'
-    );
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
   });
 
   it('Será validado que o endpoint retorna uma pessoa palestrante com base no id da rota', async () => {
     await frisby
       .get(`${url}/talker/1`)
       .expect('status', 200)
-      .then((responseGet) => {
+      .then((responseGet: { json: any }) => {
         const { json } = responseGet;
         expect(json).toEqual({
           name: 'Henrique Albuquerque',
@@ -37,7 +30,7 @@ describe('2 - Crie o endpoint GET /talker/:id', () => {
     await frisby
       .get(`${url}/talker/9`)
       .expect('status', 404)
-      .then((responseGet) => {
+      .then((responseGet: { json: any }) => {
         const { json } = responseGet;
         expect(json.message).toBe('Pessoa palestrante não encontrada');
       });

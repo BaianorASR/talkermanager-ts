@@ -1,22 +1,15 @@
-const frisby = require('frisby');
-const fs = require('fs');
-const path = require('path');
-const talkersSeed = require('./seed.json');
+// const frisby = require('frisby');
+// const fs = require('fs');
+// const path = require('path');
+// const talkersSeed = require('./seed.json');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
   beforeEach(() => {
-    const talkerSeed = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerSeed = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerSeed,
-      'utf8'
-    );
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
   });
 
   it('Será validado que é possível fazer uma busca por termo com sucesso', async () => {
@@ -26,7 +19,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -55,7 +48,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -69,7 +62,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           })
           .get(`${url}/talker/search?q=M`)
           .expect('status', 200)
-          .then((responseGet) => {
+          .then((responseGet: { json: any }) => {
             const { json } = responseGet;
             expect(json).toEqual(
               expect.arrayContaining([
@@ -87,7 +80,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
                     rate: 4,
                   },
                 }),
-              ])
+              ]),
             );
           });
       });
@@ -101,7 +94,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -115,7 +108,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           })
           .get(`${url}/talker`)
           .expect('status', 200)
-          .then((responseGet) => {
+          .then((responseGet: { json: any }) => {
             const { json } = responseGet;
             expect(json).toEqual(talkersSeed);
           });
@@ -132,7 +125,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -146,7 +139,7 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           })
           .get(`${url}/talker`)
           .expect('status', 200)
-          .then((responseGet) => {
+          .then((responseGet: { json: any }) => {
             const { json } = responseGet;
             expect(json).toEqual([]);
           });
@@ -166,10 +159,10 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           .setup()
           .get(`${url}/talker/search?q=Z`)
           .expect('status', 401)
-          .then((responseGet) => {
+          .then((responseGet: { json: any }) => {
             const { json } = responseGet;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
@@ -193,10 +186,10 @@ describe('7 - Crie o endpoint GET /talker/search?q=searchTerm', () => {
           })
           .get(`${url}/talker/search?=Ma`)
           .expect('status', 401)
-          .then((responseGet) => {
+          .then((responseGet: { json: any }) => {
             const { json } = responseGet;
             expect(json.message).toBe('Token inválido');
-          })
+          }),
       );
   });
 });

@@ -1,29 +1,22 @@
-const frisby = require('frisby');
-const fs = require('fs');
-const path = require('path');
+// const frisby = require('frisby');
+// const fs = require('fs');
+// const path = require('path');
 const talkersSeed = require('./seed.json');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('1 - Crie o endpoint GET /talker', () => {
   beforeEach(() => {
-    const talkerSeed = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerSeed = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerSeed,
-      'utf8'
-    );
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
   });
 
   it('Será validado que o endpoint retorna um array com todos as pessoas palestrantes cadastradas', async () => {
     await frisby
       .get(`${url}/talker`)
       .expect('status', 200)
-      .then((responseGet) => {
+      .then((responseGet: { json: any }) => {
         const { json } = responseGet;
         expect(json).toEqual(talkersSeed);
       });
@@ -35,7 +28,7 @@ describe('1 - Crie o endpoint GET /talker', () => {
     await frisby
       .get(`${url}/talker`)
       .expect('status', 200)
-      .then((responseGet) => {
+      .then((responseGet: { json: any }) => {
         const { json } = responseGet;
         expect(json).toEqual([]);
       });

@@ -1,25 +1,18 @@
-const frisby = require('frisby');
-const fs = require('fs');
-const path = require('path');
+// const frisby = require('frisby');
+// const fs = require('fs');
+// const path = require('path');
 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
 
 describe('5 - Crie o endpoint PUT /talker/:id', () => {
   beforeEach(() => {
-    const talkerMock = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerMock = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerMock,
-      'utf8'
-    );
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerMock, 'utf8');
   });
 
   it('Será validado que é possível editar uma pessoa palestrante com sucesso', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -27,7 +20,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -48,7 +41,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -60,7 +53,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -81,19 +74,19 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 200)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             expect(require('../talker.json')).toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining({
+              expect.arrayContaining([
+                expect.objectContaining({
                   id: resultTalker.id,
                   name: 'Zendaya',
                   age: 25,
                   talk: {
                     watchedAt: '24/10/2020',
                     rate: 4,
-                  }
-                })]
-              )
+                  },
+                }),
+              ]),
             );
             const { json } = responseUpdate;
             expect(json.id).toBe(resultTalker.id);
@@ -106,7 +99,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem nome', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -114,7 +107,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -135,7 +128,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -148,7 +141,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -168,7 +161,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('O campo "name" é obrigatório');
           });
@@ -176,7 +169,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com nome menor que 3 caracteres', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -184,7 +177,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -205,7 +198,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -218,7 +211,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -239,17 +232,15 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
-            expect(json.message).toBe(
-              'O "name" deve ter pelo menos 3 caracteres'
-            );
+            expect(json.message).toBe('O "name" deve ter pelo menos 3 caracteres');
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem idade', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -257,7 +248,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -278,7 +269,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -291,7 +282,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -311,7 +302,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('O campo "age" é obrigatório');
           });
@@ -319,7 +310,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com idade menor de 18 anos', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -327,7 +318,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -348,7 +339,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -361,7 +352,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -382,7 +373,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('A pessoa palestrante deve ser maior de idade');
           });
@@ -390,7 +381,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem o campo talk', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -398,7 +389,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -419,7 +410,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -432,7 +423,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -449,17 +440,17 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             age: 25,
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem a chave rate', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -467,7 +458,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -488,7 +479,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -501,7 +492,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -521,17 +512,17 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com rate menor que 1', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -539,7 +530,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -560,7 +551,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -573,7 +564,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -594,17 +585,15 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
-            expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
-            );
+            expect(json.message).toBe('O campo "rate" deve ser um inteiro de 1 à 5');
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com rate maior que 5', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -612,7 +601,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -633,7 +622,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -646,7 +635,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -667,17 +656,15 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
-            expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
-            );
+            expect(json.message).toBe('O campo "rate" deve ser um inteiro de 1 à 5');
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem a chave watchedAt', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -685,7 +672,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -706,7 +693,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -719,7 +706,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -739,17 +726,17 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com watchedAt sem o formato "dd/mm/aaaa"', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -757,7 +744,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -778,7 +765,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -791,7 +778,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -812,17 +799,17 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 400)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe(
-              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"'
+              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
             );
           });
       });
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante sem estar autorizado', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -830,7 +817,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -851,7 +838,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -875,15 +862,15 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 401)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
   it('Será validado que não é possível editar uma pessoa palestrante com token inválido', async () => {
-    let resultTalker;
+    let resultTalker: { id: any };
 
     await frisby
       .post(`${url}/login`, {
@@ -891,7 +878,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
         password: '12345678',
       })
       .expect('status', 200)
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -912,7 +899,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { body: any }) => {
             const { body } = responseCreate;
             resultTalker = JSON.parse(body);
           });
@@ -944,10 +931,10 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
             },
           })
           .expect('status', 401)
-          .then((responseUpdate) => {
+          .then((responseUpdate: { json: any }) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('Token inválido');
-          })
+          }),
       );
   });
 });

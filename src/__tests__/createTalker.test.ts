@@ -13,16 +13,9 @@ const url = 'http://localhost:3000';
 
 describe('4 - Crie o endpoint POST /talker', () => {
   beforeEach(() => {
-    const talkerSeed = fs.readFileSync(
-      path.join(__dirname, 'seed.json'),
-      'utf8'
-    );
+    const talkerSeed = fs.readFileSync(path.join(__dirname, 'seed.json'), 'utf8');
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'talker.json'),
-      talkerSeed,
-      'utf8'
-    );
+    fs.writeFileSync(path.join(__dirname, '..', 'talker.json'), talkerSeed, 'utf8');
   });
 
   it('Será validado que é possível cadastrar uma pessoa palestrante com sucesso', async () => {
@@ -33,7 +26,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -51,11 +44,9 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 201)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             expect(require('../talker.json')).toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining(postTalkerMock)]
-                )
+              expect.arrayContaining([expect.objectContaining(postTalkerMock)]),
             );
             const { json } = responseCreate;
             expect(json).toEqual(postTalkerMock);
@@ -71,7 +62,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -88,7 +79,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe('O campo "name" é obrigatório');
           });
@@ -103,7 +94,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -121,11 +112,9 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
-            expect(json.message).toBe(
-              'O "name" deve ter pelo menos 3 caracteres'
-            );
+            expect(json.message).toBe('O "name" deve ter pelo menos 3 caracteres');
           });
       });
   });
@@ -138,7 +127,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -155,7 +144,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe('O campo "age" é obrigatório');
           });
@@ -170,7 +159,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -188,11 +177,9 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
-            expect(json.message).toBe(
-              'A pessoa palestrante deve ser maior de idade'
-            );
+            expect(json.message).toBe('A pessoa palestrante deve ser maior de idade');
           });
       });
   });
@@ -205,7 +192,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -222,10 +209,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             age: 24,
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -239,7 +226,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -257,10 +244,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -274,7 +261,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -292,11 +279,9 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: -1, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
-            expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
-            );
+            expect(json.message).toBe('O campo "rate" deve ser um inteiro de 1 à 5');
           });
       });
   });
@@ -309,7 +294,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -327,11 +312,9 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 7, watchedAt: '25/09/2020' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
-            expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
-            );
+            expect(json.message).toBe('O campo "rate" deve ser um inteiro de 1 à 5');
           });
       });
   });
@@ -344,7 +327,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -362,10 +345,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5 },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -379,7 +362,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           password: '12345678',
         },
       })
-      .then((responseLogin) => {
+      .then((responseLogin: { body: any }) => {
         const { body } = responseLogin;
         const result = JSON.parse(body);
         return frisby
@@ -397,10 +380,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '42-20-3333' },
           })
           .expect('status', 400)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"'
+              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
             );
           });
       });
@@ -422,10 +405,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '25/09/2020' },
           })
           .expect('status', 401)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
@@ -453,10 +436,10 @@ describe('4 - Crie o endpoint POST /talker', () => {
             talk: { rate: 5, watchedAt: '20/10/2020' },
           })
           .expect('status', 401)
-          .then((responseCreate) => {
+          .then((responseCreate: { json: any }) => {
             const { json } = responseCreate;
             expect(json.message).toBe('Token inválido');
-          })
+          }),
       );
   });
 });
